@@ -102,14 +102,18 @@ for block in blocks:
         url = 'https://www.kingstonhospital.nhs.uk'+block['href']
         title = block.text.strip()
         csvMth = title[:3].strip()
-        csvYr = title.split(' ')[1].strip()[-4:]
-        if 'nvoic' in title:
-            csvMth = block.text.strip().split(' ')[1].strip()[:3]
-            csvYr = block.text.strip().split(' ')[2].strip()[-4:]
-        if 'ecember' in title:
+        csvYr = title.split()[1].strip()[-4:]
+        date_start = None
+        try:
+            date_start = int(csvMth[0])
+        except:
+            pass
+        if date_start:
+            csvMth = title.split()[1][:3].strip()
+            csvYr = title.split()[2].strip()[-4:]
+        if 'ece' in csvMth:
             csvMth = '12'
-            csvYr = '2013'
-        if 'anuary' in title:
+        if 'anu' in csvMth:
             csvMth = '01'
         csvMth = convert_mth_strings(csvMth.upper())
         data.append([csvYr, csvMth, url])
